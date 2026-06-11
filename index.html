@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Калькулятор стоимости поездки: топливо, платные дороги и общая сумма."
+    />
+    <title>Калькулятор стоимости поездки</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="calculator" aria-labelledby="page-title">
+        <div class="calculator__header">
+          <div class="title-group">
+            <span class="title-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img">
+                <path d="M5 16h14l-1.1-5.1A3.8 3.8 0 0 0 14.2 8H9.8a3.8 3.8 0 0 0-3.7 2.9L5 16Z" />
+                <path d="M7 16v2.2M17 16v2.2M8.5 19.5h0M15.5 19.5h0M7.2 12.5h9.6" />
+              </svg>
+            </span>
+            <div>
+              <p class="eyebrow">Fuel planner</p>
+              <h1 id="page-title">Калькулятор стоимости поездки</h1>
+            </div>
+          </div>
+
+          <label class="theme-toggle" for="themeSwitch">
+            <input id="themeSwitch" type="checkbox" />
+            <span class="theme-toggle__track" aria-hidden="true">
+              <span class="theme-toggle__thumb"></span>
+            </span>
+            <span class="theme-toggle__text">Темная тема</span>
+          </label>
+        </div>
+
+        <form class="calculator__form" id="tripForm" novalidate>
+          <div class="input-grid">
+            <label class="field">
+              <span class="field__label">Расстояние</span>
+              <span class="field__control">
+                <input
+                  id="distance"
+                  name="distance"
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  inputmode="decimal"
+                  placeholder="Например, 350"
+                  required
+                />
+                <span class="field__unit">км</span>
+              </span>
+              <span class="field__error" data-error-for="distance"></span>
+            </label>
+
+            <label class="field">
+              <span class="field__label">Средний расход топлива</span>
+              <span class="field__control">
+                <input
+                  id="consumption"
+                  name="consumption"
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  inputmode="decimal"
+                  placeholder="Например, 7.5"
+                  required
+                />
+                <span class="field__unit">л/100 км</span>
+              </span>
+              <span class="field__error" data-error-for="consumption"></span>
+            </label>
+
+            <label class="field">
+              <span class="field__label">Цена топлива за литр</span>
+              <span class="field__control">
+                <input
+                  id="fuelPrice"
+                  name="fuelPrice"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  inputmode="decimal"
+                  placeholder="Например, 62.5"
+                  required
+                />
+                <span class="field__unit">за л</span>
+              </span>
+              <span class="field__error" data-error-for="fuelPrice"></span>
+            </label>
+
+            <label class="field">
+              <span class="field__label">Стоимость платных дорог</span>
+              <span class="field__control">
+                <input
+                  id="tolls"
+                  name="tolls"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  inputmode="decimal"
+                  placeholder="0"
+                />
+                <span class="field__unit">итого</span>
+              </span>
+              <span class="field__error" data-error-for="tolls"></span>
+            </label>
+          </div>
+
+          <label class="switch-row" for="roundTrip">
+            <span class="switch-row__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img">
+                <path d="M4 7h12.5a3.5 3.5 0 0 1 0 7H8" />
+                <path d="m8 4-4 3 4 3M16 20l4-3-4-3" />
+              </svg>
+            </span>
+            <span>
+              <span class="switch-row__title">Туда и обратно</span>
+              <span class="switch-row__hint">Расстояние будет умножено на 2</span>
+            </span>
+            <input id="roundTrip" name="roundTrip" type="checkbox" />
+            <span class="switch-row__toggle" aria-hidden="true"></span>
+          </label>
+
+          <div class="actions">
+            <button class="button button--primary" type="submit">Рассчитать</button>
+            <button class="button button--ghost" id="resetButton" type="button">Сбросить</button>
+          </div>
+        </form>
+
+        <section class="results" aria-live="polite" aria-label="Результаты расчета">
+          <div class="results__top">
+            <div>
+              <p class="eyebrow">Итог</p>
+              <h2>Стоимость поездки</h2>
+            </div>
+            <span class="result-badge" id="effectiveDistance">0 км</span>
+          </div>
+
+          <div class="result-grid">
+            <article class="result-card">
+              <span class="result-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img">
+                  <path d="M8 20V5a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v15" />
+                  <path d="M7 20h11M10 7h5M17 8h1.2a1.8 1.8 0 0 1 1.8 1.8V17a2 2 0 0 0 2 2" />
+                </svg>
+              </span>
+              <span class="result-card__label">Топливо</span>
+              <strong id="fuelNeeded">0 л</strong>
+            </article>
+
+            <article class="result-card">
+              <span class="result-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img">
+                  <path d="M6 19 9 5M18 19 15 5M5 11h14M4 15h16" />
+                </svg>
+              </span>
+              <span class="result-card__label">Стоимость топлива</span>
+              <strong id="fuelCost">0</strong>
+            </article>
+
+            <article class="result-card">
+              <span class="result-card__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img">
+                  <path d="M4 18h16M6 18 10 6M18 18 14 6M8.3 11h7.4M7.1 15h9.8" />
+                </svg>
+              </span>
+              <span class="result-card__label">Платные дороги</span>
+              <strong id="tollCost">0</strong>
+            </article>
+
+            <article class="result-card result-card--total">
+              <span class="result-card__label">Общая стоимость</span>
+              <strong id="totalCost">0</strong>
+            </article>
+          </div>
+
+          <p class="status-message" id="statusMessage">Введите данные, чтобы увидеть расчет.</p>
+        </section>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
